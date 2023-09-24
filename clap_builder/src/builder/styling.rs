@@ -49,13 +49,19 @@ impl Styles {
         #[cfg(feature = "color")]
         {
             Self {
-                header: anstyle::Style::new().bold().underline(),
+                header: anstyle::Style::new()
+                    .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Cyan)))
+                    .bold().underline(),
                 error: anstyle::Style::new()
                     .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Red)))
                     .bold(),
-                usage: anstyle::Style::new().bold().underline(),
-                literal: anstyle::Style::new().bold(),
-                placeholder: anstyle::Style::new(),
+                usage: anstyle::Style::new()
+                    .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Green)))
+                    .bold(),
+                literal: anstyle::Style::new()
+                    .bold(),
+                placeholder: anstyle::Style::new()
+                    .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::BrightBlack))),
                 valid: anstyle::Style::new()
                     .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Green))),
                 invalid: anstyle::Style::new()

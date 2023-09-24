@@ -298,7 +298,7 @@ fn option_default_values(opt: &clap::Arg) -> Option<String> {
             .collect::<Vec<_>>()
             .join(",");
 
-        return Some(format!("[default: {values}]"));
+        return Some(format!("(default: {values})"));
     }
 
     None
