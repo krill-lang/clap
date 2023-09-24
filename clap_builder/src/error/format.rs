@@ -36,9 +36,9 @@ impl ErrorFormatter for KindFormatter {
         let mut styled = StyledStr::new();
         start_error(&mut styled, styles);
         if let Some(msg) = error.kind().as_str() {
-            styled.push_str(msg);
+            styled.push_str(&(msg.to_string()+"\x1b[0m"));
         } else if let Some(source) = error.inner.source.as_ref() {
-            let _ = write!(styled, "{source}");
+            let _ = write!(styled, "\x1b[0m{source}");
         } else {
             styled.push_str("unknown cause");
         }
@@ -66,7 +66,7 @@ impl ErrorFormatter for RichFormatter {
 
         if !write_dynamic_context(error, &mut styled, styles) {
             if let Some(msg) = error.kind().as_str() {
-                styled.push_str(msg);
+                styled.push_str(&(msg.to_string()+"\x1b[0m"));
             } else if let Some(source) = error.inner.source.as_ref() {
                 let _ = write!(styled, "{source}");
             } else {
@@ -129,7 +129,7 @@ impl ErrorFormatter for RichFormatter {
 fn start_error(styled: &mut StyledStr, styles: &Styles) {
     use std::fmt::Write as _;
     let error = &styles.get_error();
-    let _ = write!(styled, "{}Error:{} ", error.render(), error.render_reset());
+    let _ = write!(styled, "{}Error:{} \x1b[1m", error.render(), error.render_reset());
 }
 
 #[must_use]
@@ -446,7 +446,7 @@ pub(crate) fn format_error_message(
 ) -> StyledStr {
     let mut styled = StyledStr::new();
     start_error(&mut styled, styles);
-    styled.push_str(message);
+    styled.push_str(&(message.to_string()+"\x1b[0m"));
     if let Some(usage) = usage {
         put_usage(&mut styled, usage);
     }
