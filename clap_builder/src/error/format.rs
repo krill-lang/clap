@@ -126,10 +126,9 @@ impl ErrorFormatter for RichFormatter {
     }
 }
 
-fn start_error(styled: &mut StyledStr, styles: &Styles) {
+fn start_error(styled: &mut StyledStr, _styles: &Styles) {
     use std::fmt::Write as _;
-    let error = &styles.get_error();
-    let _ = write!(styled, "{}Error: ", error.render());
+    let _ = write!(styled, "\x1b[1;91mError: \x1b[0;91m");
 }
 
 #[must_use]
