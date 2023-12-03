@@ -20,6 +20,46 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [4.4.10] - 2023-11-28
+
+### Documentation
+
+- Link out to changelog
+- Cross link derive's attribute reference to derive tutorial
+
+## [4.4.9] - 2023-11-27
+
+### Fixes
+
+- *(help)* Show correct `Command::about` under flattened headings
+- *(help)* Respect `hide` when flattening subcommands
+
+## [4.4.8] - 2023-11-10
+
+### Features
+
+- Add `Command::flatten_help` to allow `git stash -h` like help for subcommands
+
+## [4.4.7] - 2023-10-24
+
+### Performance
+
+- Reduced code size
+
+## [4.4.6] - 2023-09-28
+
+### Internal
+
+- Upgrade `anstream`
+
+## [4.4.5] - 2023-09-25
+
+### Fixes
+
+- *(parser)* When inferring subcommand `name` or `long_flag`, allow ambiguous-looking matches that unambiguously map back to the same command
+- *(parser)* When inferring subcommand `long_flag`, don't panic
+- *(assert)* Clarify what action is causing a positional that doesn't set values which is especially useful for derive users
+
 ## [4.4.4] - 2023-09-18
 
 ### Internal
@@ -4444,7 +4484,13 @@ Minimum version of Rust is now v1.13.0 (Stable)
 * **arg**  allow lifetimes other than 'static in arguments ([9e8c1fb9](https://github.com/clap-rs/clap/commit/9e8c1fb9406f8448873ca58bab07fe905f1551e5))
 
 <!-- next-url -->
-[Unreleased]: https://github.com/clap-rs/clap/compare/v4.4.4...HEAD
+[Unreleased]: https://github.com/clap-rs/clap/compare/v4.4.10...HEAD
+[4.4.10]: https://github.com/clap-rs/clap/compare/v4.4.9...v4.4.10
+[4.4.9]: https://github.com/clap-rs/clap/compare/v4.4.8...v4.4.9
+[4.4.8]: https://github.com/clap-rs/clap/compare/v4.4.7...v4.4.8
+[4.4.7]: https://github.com/clap-rs/clap/compare/v4.4.6...v4.4.7
+[4.4.6]: https://github.com/clap-rs/clap/compare/v4.4.5...v4.4.6
+[4.4.5]: https://github.com/clap-rs/clap/compare/v4.4.4...v4.4.5
 [4.4.4]: https://github.com/clap-rs/clap/compare/v4.4.3...v4.4.4
 [4.4.3]: https://github.com/clap-rs/clap/compare/v4.4.2...v4.4.3
 [4.4.2]: https://github.com/clap-rs/clap/compare/v4.4.1...v4.4.2

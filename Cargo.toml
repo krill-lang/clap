@@ -27,7 +27,7 @@ include = [
 
 [package]
 name = "clap"
-version = "4.4.4"
+version = "4.4.10"
 description = "A simple to use, efficient, and full-featured Command Line Argument Parser"
 repository = "https://github.com/clap-rs/clap"
 categories = ["command-line-interface"]
@@ -62,6 +62,7 @@ pre-release-replacements = [
   {file="CHANGELOG.md", search="<!-- next-url -->", replace="<!-- next-url -->\n[Unreleased]: https://github.com/clap-rs/clap/compare/{{tag_name}}...HEAD", exactly=1},
   {file="CITATION.cff", search="^date-released: ....-..-..", replace="date-released: {{date}}"},
   {file="CITATION.cff", search="^version: .+\\..+\\..+", replace="version: {{version}}"},
+  {file="src/lib.rs", search="blob/v.+\\..+\\..+/CHANGELOG.md", replace="blob/v{{version}}/CHANGELOG.md", exactly=1},
 ]
 
 [features]
@@ -101,19 +102,17 @@ unstable-styles = ["clap_builder/unstable-styles"]
 bench = false
 
 [dependencies]
-clap_builder = { path = "./clap_builder", version = "=4.4.4", default-features = false }
-clap_derive = { path = "./clap_derive", version = "=4.4.2", optional = true }
+clap_builder = { path = "./clap_builder", version = "=4.4.9", default-features = false }
+clap_derive = { path = "./clap_derive", version = "=4.4.7", optional = true }
 
 [dev-dependencies]
-trybuild = "1.0.83"
+trybuild = "1.0.85"
 rustversion = "1.0.14"
 # Cutting out `filesystem` feature
-trycmd = { version = "0.14.17", default-features = false, features = ["color-auto", "diff", "examples"] }
+trycmd = { version = "0.14.19", default-features = false, features = ["color-auto", "diff", "examples"] }
 humantime = "2.1.0"
-snapbox = "0.4.12"
-shlex = "1.1.0"
-static_assertions = "1.1.0"
-unic-emoji-char = "0.9.0"
+snapbox = "0.4.14"
+shlex = "1.2.0"
 
 [[example]]
 name = "demo"
