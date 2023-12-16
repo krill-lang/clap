@@ -66,15 +66,15 @@ impl ErrorFormatter for RichFormatter {
 
         if !write_dynamic_context(error, &mut styled, styles) {
             if let Some(msg) = error.kind().as_str() {
-                styled.push_str(&msg.to_string());
+                styled.push_str(msg);
             } else if let Some(source) = error.inner.source.as_ref() {
                 let _ = write!(styled, "{source}");
             } else {
                 styled.push_str("unknown cause");
             }
-
-            styled.push_str("\x1b[0m");
         }
+
+        styled.push_str("\x1b[0m");
 
         let mut suggested = false;
         if let Some(valid) = error.get(ContextKind::SuggestedSubcommand) {
