@@ -68,7 +68,7 @@ impl ErrorFormatter for RichFormatter {
             if let Some(msg) = error.kind().as_str() {
                 styled.push_str(&(msg.to_string()+"\x1b[0m"));
             } else if let Some(source) = error.inner.source.as_ref() {
-                let _ = write!(styled, "{source}");
+                let _ = write!(styled, "{source}\x1b[0m");
             } else {
                 styled.push_str("unknown cause");
             }
