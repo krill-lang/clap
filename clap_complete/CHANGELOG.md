@@ -7,6 +7,58 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [4.5.1] - 2024-02-16
+
+### Fixes
+
+- Correctly handle completion descriptions with newlines
+
+## [4.5.0] - 2024-02-08
+
+### Compatibility
+
+- Update MSRV to 1.74
+
+## [4.4.10] - 2024-02-02
+
+### Fixes
+
+- *(bash)* Allow completing filenames with spaces
+
+## [4.4.9] - 2024-01-22
+
+### Features
+
+- *(bash)* Add support file `ValueHint::FilePath`
+- *(bash)* Add support file `ValueHint::DirPath`
+- *(bash)* Don't add space for `ValueHint::Other`
+
+## [4.4.8] - 2024-01-19
+
+### Fixes
+
+- *(bash)* be consistent in identifiers when custom bin names are used
+
+## [4.4.7] - 2024-01-15
+
+### Fixes
+
+- *(unstable)* Don't have dynamic completions pollute the parent command's help output
+
+## [4.4.6] - 2024-01-02
+
+### Fixes
+
+- Work with older Bash versions, particularly for MacOS
+
+## [4.4.5] - 2023-12-27
+
+### Documentation
+
+- *(unstable)* Include / expand `dynamic` on docs.rs
+
+## [4.4.4] - 2023-10-24
+
 ## [4.4.3] - 2023-09-28
 
 ## [4.4.2] - 2023-09-25
@@ -184,7 +236,16 @@ MSRV changed to 1.64.0
 ## [3.0.1] - 2022-01-03
 
 <!-- next-url -->
-[Unreleased]: https://github.com/clap-rs/clap/compare/clap_complete-v4.4.3...HEAD
+[Unreleased]: https://github.com/clap-rs/clap/compare/clap_complete-v4.5.1...HEAD
+[4.5.1]: https://github.com/clap-rs/clap/compare/clap_complete-v4.5.0...clap_complete-v4.5.1
+[4.5.0]: https://github.com/clap-rs/clap/compare/clap_complete-v4.4.10...clap_complete-v4.5.0
+[4.4.10]: https://github.com/clap-rs/clap/compare/clap_complete-v4.4.9...clap_complete-v4.4.10
+[4.4.9]: https://github.com/clap-rs/clap/compare/clap_complete-v4.4.8...clap_complete-v4.4.9
+[4.4.8]: https://github.com/clap-rs/clap/compare/clap_complete-v4.4.7...clap_complete-v4.4.8
+[4.4.7]: https://github.com/clap-rs/clap/compare/clap_complete-v4.4.6...clap_complete-v4.4.7
+[4.4.6]: https://github.com/clap-rs/clap/compare/clap_complete-v4.4.5...clap_complete-v4.4.6
+[4.4.5]: https://github.com/clap-rs/clap/compare/clap_complete-v4.4.4...clap_complete-v4.4.5
+[4.4.4]: https://github.com/clap-rs/clap/compare/clap_complete-v4.4.3...clap_complete-v4.4.4
 [4.4.3]: https://github.com/clap-rs/clap/compare/clap_complete-v4.4.2...clap_complete-v4.4.3
 [4.4.2]: https://github.com/clap-rs/clap/compare/clap_complete-v4.4.1...clap_complete-v4.4.2
 [4.4.1]: https://github.com/clap-rs/clap/compare/clap_complete-v4.4.0...clap_complete-v4.4.1

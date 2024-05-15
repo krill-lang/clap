@@ -16,7 +16,7 @@ pub trait Completer {
         completer: &str,
         buf: &mut dyn std::io::Write,
     ) -> Result<(), std::io::Error>;
-    /// Complete the command
+    /// Complete the given command
     fn write_complete(
         &self,
         cmd: &mut clap::Command,
@@ -26,7 +26,7 @@ pub trait Completer {
     ) -> Result<(), std::io::Error>;
 }
 
-/// Complete the command specified
+/// Complete the given command
 pub fn complete(
     cmd: &mut clap::Command,
     args: Vec<std::ffi::OsString>,
@@ -35,7 +35,7 @@ pub fn complete(
 ) -> Result<Vec<(std::ffi::OsString, Option<StyledStr>)>, std::io::Error> {
     cmd.build();
 
-    let raw_args = clap_lex::RawArgs::new(args.into_iter());
+    let raw_args = clap_lex::RawArgs::new(args);
     let mut cursor = raw_args.cursor();
     let mut target_cursor = raw_args.cursor();
     raw_args.seek(

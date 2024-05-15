@@ -15,11 +15,13 @@ pub fn basic_command(name: &'static str) -> clap::Command {
                 .action(clap::ArgAction::SetTrue),
         )
         .subcommand(
-            clap::Command::new("test").about("Subcommand").arg(
-                clap::Arg::new("debug")
-                    .short('d')
-                    .action(clap::ArgAction::Count),
-            ),
+            clap::Command::new("test")
+                .about("Subcommand\nwith a second line")
+                .arg(
+                    clap::Arg::new("debug")
+                        .short('d')
+                        .action(clap::ArgAction::Count),
+                ),
         )
 }
 
@@ -281,8 +283,8 @@ pub fn subcommand_last(name: &'static str) -> clap::Command {
         .subcommands([clap::Command::new("foo"), clap::Command::new("bar")])
 }
 
-pub fn assert_matches_path(
-    expected_path: impl AsRef<std::path::Path>,
+pub fn assert_matches(
+    expected: impl Into<snapbox::Data>,
     gen: impl clap_complete::Generator,
     mut cmd: clap::Command,
     name: &'static str,
@@ -291,16 +293,18 @@ pub fn assert_matches_path(
     clap_complete::generate(gen, &mut cmd, name, &mut buf);
 
     snapbox::Assert::new()
-        .action_env("SNAPSHOTS")
+        .action_env(snapbox::DEFAULT_ACTION_ENV)
         .normalize_paths(false)
-        .matches_path(expected_path, buf);
+        .matches(expected, buf);
 }
 
-pub fn register_example(context: &str, name: &str, shell: completest::Shell) {
+pub fn register_example<R: completest::RuntimeBuilder>(context: &str, name: &str) {
+    use completest::Runtime as _;
+
     let scratch = snapbox::path::PathFixture::mutable_temp().unwrap();
     let scratch_path = scratch.path().unwrap();
 
-    let shell_name = shell.name();
+    let shell_name = R::name();
     let home = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("tests/snapshots/home")
         .join(context)
@@ -341,7 +345,7 @@ pub fn register_example(context: &str, name: &str, shell: completest::Shell) {
     let registration = std::str::from_utf8(&registration.stdout).unwrap();
     assert!(!registration.is_empty());
 
-    let mut runtime = shell.init(bin_root, scratch_path.to_owned()).unwrap();
+    let mut runtime = R::new(bin_root, scratch_path.to_owned()).unwrap();
 
     runtime.register(name, registration).unwrap();
 
@@ -350,12 +354,14 @@ pub fn register_example(context: &str, name: &str, shell: completest::Shell) {
     scratch.close().unwrap();
 }
 
-pub fn load_runtime(
+pub fn load_runtime<R: completest::RuntimeBuilder>(
     context: &str,
     name: &str,
-    shell: completest::Shell,
-) -> Box<dyn completest::Runtime> {
-    let shell_name = shell.name();
+) -> Box<dyn completest::Runtime>
+where
+    <R as completest::RuntimeBuilder>::Runtime: 'static,
+{
+    let shell_name = R::name();
     let home = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("tests/snapshots/home")
         .join(context)
@@ -382,11 +388,11 @@ pub fn load_runtime(
     println!("Compiled");
     let bin_root = bin_path.parent().unwrap().to_owned();
 
-    let runtime = shell.with_home(bin_root, home).unwrap();
+    let runtime = R::with_home(bin_root, home).unwrap();
 
     Box::new(ScratchRuntime {
         _scratch: scratch,
-        runtime,
+        runtime: Box::new(runtime),
     })
 }
 

@@ -606,6 +606,7 @@ trait AnyValueParser: Send + Sync + 'static {
         self.parse_ref(cmd, arg, value)
     }
 
+    #[allow(unused)]
     fn parse(
         &self,
         cmd: &crate::Command,
@@ -613,6 +614,7 @@ trait AnyValueParser: Send + Sync + 'static {
         value: std::ffi::OsString,
     ) -> Result<AnyValue, crate::Error>;
 
+    #[allow(unused)]
     fn parse_(
         &self,
         cmd: &crate::Command,

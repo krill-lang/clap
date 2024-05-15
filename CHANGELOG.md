@@ -20,6 +20,115 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [4.5.4] - 2024-03-25
+
+### Fixes
+
+- *(derive)* Allow non-literal `#[arg(id)]` attributes again
+
+## [4.5.3] - 2024-03-15
+
+### Internal
+
+- *(derive)* Update `heck`
+
+## [4.5.2] - 2024-03-06
+
+### Fixes
+
+- *(macros)* Silence a warning
+
+## [4.5.1] - 2024-02-16
+
+### Fixes
+
+- *(error)* Include suggestion to add `--` even if there is a "did you mean" so long as `last` or `trailing_var_arg` is used
+
+## [4.5.0] - 2024-02-08
+
+### Compatibility
+
+- Update MSRV to 1.74
+
+## [4.4.18] - 2024-01-16
+
+### Fixes
+
+- *(error)* When lacking `usage` feature, ensure the list of required arguments is unique
+
+## [4.4.17] - 2024-01-15
+
+### Fixes
+
+- Fix `panic!` when mixing `args_conflicts_with_subcommands` with `ArgGroup` (which is implicit with `derive`) introduced in 4.4.15
+
+## [4.4.16] - 2024-01-12
+
+### Fixes
+
+- Ensure invalid escape sequences in user-defined strings are correctly stripped when terminal doesn't support color
+
+## [4.4.15] - 2024-01-11
+
+### Fixes
+
+- Improve error for `args_conflicts_with_subcommands`
+- Ensure we error for `args_conflicts_with_subcommands` when using subcommand short and long flags
+
+## [4.4.14] - 2024-01-08
+
+### Documentation
+
+- Fix `find` cookbook entry to allow repeats of flags/options
+
+### Features
+
+- Allow `num_args(0)` on options which allows making them emulate being a flag for position-tracking flags
+
+## [4.4.13] - 2024-01-04
+
+### Documentation
+
+- Fix link to structopt migration guide
+
+## [4.4.12] - 2023-12-28
+
+### Performance
+
+- Only ask `TypedValueParser` for possible values if needed
+
+## [4.4.11] - 2023-12-04
+
+### Features
+
+- Add `Command::mut_group`
+
+## [4.4.10] - 2023-11-28
+
+### Documentation
+
+- Link out to changelog
+- Cross link derive's attribute reference to derive tutorial
+
+## [4.4.9] - 2023-11-27
+
+### Fixes
+
+- *(help)* Show correct `Command::about` under flattened headings
+- *(help)* Respect `hide` when flattening subcommands
+
+## [4.4.8] - 2023-11-10
+
+### Features
+
+- Add `Command::flatten_help` to allow `git stash -h` like help for subcommands
+
+## [4.4.7] - 2023-10-24
+
+### Performance
+
+- Reduced code size
+
 ## [4.4.6] - 2023-09-28
 
 ### Internal
@@ -61,9 +170,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [4.4.0] - 2023-08-24
 
-### Compatibility
+### compatibility
 
-- Update MSRV to 1.70.0
+- update msrv to 1.70.0
 
 ## [4.3.24] - 2023-08-23
 
@@ -4458,7 +4567,24 @@ Minimum version of Rust is now v1.13.0 (Stable)
 * **arg**  allow lifetimes other than 'static in arguments ([9e8c1fb9](https://github.com/clap-rs/clap/commit/9e8c1fb9406f8448873ca58bab07fe905f1551e5))
 
 <!-- next-url -->
-[Unreleased]: https://github.com/clap-rs/clap/compare/v4.4.6...HEAD
+[Unreleased]: https://github.com/clap-rs/clap/compare/v4.5.4...HEAD
+[4.5.4]: https://github.com/clap-rs/clap/compare/v4.5.3...v4.5.4
+[4.5.3]: https://github.com/clap-rs/clap/compare/v4.5.2...v4.5.3
+[4.5.2]: https://github.com/clap-rs/clap/compare/v4.5.1...v4.5.2
+[4.5.1]: https://github.com/clap-rs/clap/compare/v4.5.0...v4.5.1
+[4.5.0]: https://github.com/clap-rs/clap/compare/v4.4.18...v4.5.0
+[4.4.18]: https://github.com/clap-rs/clap/compare/v4.4.17...v4.4.18
+[4.4.17]: https://github.com/clap-rs/clap/compare/v4.4.16...v4.4.17
+[4.4.16]: https://github.com/clap-rs/clap/compare/v4.4.15...v4.4.16
+[4.4.15]: https://github.com/clap-rs/clap/compare/v4.4.14...v4.4.15
+[4.4.14]: https://github.com/clap-rs/clap/compare/v4.4.13...v4.4.14
+[4.4.13]: https://github.com/clap-rs/clap/compare/v4.4.12...v4.4.13
+[4.4.12]: https://github.com/clap-rs/clap/compare/v4.4.11...v4.4.12
+[4.4.11]: https://github.com/clap-rs/clap/compare/v4.4.10...v4.4.11
+[4.4.10]: https://github.com/clap-rs/clap/compare/v4.4.9...v4.4.10
+[4.4.9]: https://github.com/clap-rs/clap/compare/v4.4.8...v4.4.9
+[4.4.8]: https://github.com/clap-rs/clap/compare/v4.4.7...v4.4.8
+[4.4.7]: https://github.com/clap-rs/clap/compare/v4.4.6...v4.4.7
 [4.4.6]: https://github.com/clap-rs/clap/compare/v4.4.5...v4.4.6
 [4.4.5]: https://github.com/clap-rs/clap/compare/v4.4.4...v4.4.5
 [4.4.4]: https://github.com/clap-rs/clap/compare/v4.4.3...v4.4.4

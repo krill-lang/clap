@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [0.7.0] - 2024-02-08
+
+### Compatibility
+
+- Update MSRV to 1.74
+
+### Fixes
+
+- Improve `unsafe` code by using new `OsStr` API
+
+## [0.6.0] - 2023-10-24
+
+### Breaking Change
+
+- Renamed `is_number` to more focused `is_negative_number`
+
+### Performance
+
+- Reduced code size
+
 ## [0.5.1] - 2023-08-24
 
 ### Compatibility
@@ -83,7 +103,9 @@ MSRV changed to 1.64.0
 - Drop `memchr` dependency
 
 <!-- next-url -->
-[Unreleased]: https://github.com/clap-rs/clap/compare/clap_lex-v0.5.1...HEAD
+[Unreleased]: https://github.com/clap-rs/clap/compare/clap_lex-v0.7.0...HEAD
+[0.7.0]: https://github.com/clap-rs/clap/compare/clap_lex-v0.6.0...clap_lex-v0.7.0
+[0.6.0]: https://github.com/clap-rs/clap/compare/clap_lex-v0.5.1...clap_lex-v0.6.0
 [0.5.1]: https://github.com/clap-rs/clap/compare/clap_lex-v0.5.0...clap_lex-v0.5.1
 [0.5.0]: https://github.com/clap-rs/clap/compare/clap_lex-v0.4.1...clap_lex-v0.5.0
 [0.4.1]: https://github.com/clap-rs/clap/compare/clap_lex-v0.4.0...clap_lex-v0.4.1

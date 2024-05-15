@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 ## [Unreleased] - ReleaseDate
 
+## [0.2.20] - 2024-02-08
+
+### Compatibility
+
+- Update MSRV to 1.74
+
+## [0.2.19] - 2024-02-02
+
+### Features
+
+- Support generating files for man pages
+
+## [0.2.18] - 2024-01-29
+
+### Fixes
+
+- Print full subcommand name in title (ie include parent commands)
+- Print full subcommand in usage (ie include parent commands
+
+## [0.2.17] - 2024-01-11
+
+### Fixes
+
+- Correctly show help for fake flags
+
+## [0.2.16] - 2023-12-28
+
+### Performance
+
+- Only ask `TypedValueParser` for possible values if needed
+
+## [0.2.15] - 2023-10-24
+
 ## [0.2.14] - 2023-09-18
 
 ## [0.2.13] - 2023-08-24
@@ -94,7 +127,13 @@ MSRV changed to 1.64.0
 - Expanded the documentation
 
 <!-- next-url -->
-[Unreleased]: https://github.com/clap-rs/clap/compare/clap_mangen-v0.2.14...HEAD
+[Unreleased]: https://github.com/clap-rs/clap/compare/clap_mangen-v0.2.20...HEAD
+[0.2.20]: https://github.com/clap-rs/clap/compare/clap_mangen-v0.2.19...clap_mangen-v0.2.20
+[0.2.19]: https://github.com/clap-rs/clap/compare/clap_mangen-v0.2.18...clap_mangen-v0.2.19
+[0.2.18]: https://github.com/clap-rs/clap/compare/clap_mangen-v0.2.17...clap_mangen-v0.2.18
+[0.2.17]: https://github.com/clap-rs/clap/compare/clap_mangen-v0.2.16...clap_mangen-v0.2.17
+[0.2.16]: https://github.com/clap-rs/clap/compare/clap_mangen-v0.2.15...clap_mangen-v0.2.16
+[0.2.15]: https://github.com/clap-rs/clap/compare/clap_mangen-v0.2.14...clap_mangen-v0.2.15
 [0.2.14]: https://github.com/clap-rs/clap/compare/clap_mangen-v0.2.13...clap_mangen-v0.2.14
 [0.2.13]: https://github.com/clap-rs/clap/compare/clap_mangen-v0.2.12...clap_mangen-v0.2.13
 [0.2.12]: https://github.com/clap-rs/clap/compare/clap_mangen-v0.2.11...clap_mangen-v0.2.12

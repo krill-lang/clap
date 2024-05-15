@@ -4,8 +4,8 @@ use crate::common;
 fn basic() {
     let name = "my-app";
     let cmd = common::basic_command(name);
-    common::assert_matches_path(
-        "tests/snapshots/basic.bash",
+    common::assert_matches(
+        snapbox::file!["../snapshots/basic.bash"],
         clap_complete::shells::Bash,
         cmd,
         name,
@@ -16,8 +16,8 @@ fn basic() {
 fn feature_sample() {
     let name = "my-app";
     let cmd = common::feature_sample_command(name);
-    common::assert_matches_path(
-        "tests/snapshots/feature_sample.bash",
+    common::assert_matches(
+        snapbox::file!["../snapshots/feature_sample.bash"],
         clap_complete::shells::Bash,
         cmd,
         name,
@@ -28,8 +28,8 @@ fn feature_sample() {
 fn special_commands() {
     let name = "my-app";
     let cmd = common::special_commands_command(name);
-    common::assert_matches_path(
-        "tests/snapshots/special_commands.bash",
+    common::assert_matches(
+        snapbox::file!["../snapshots/special_commands.bash"],
         clap_complete::shells::Bash,
         cmd,
         name,
@@ -40,8 +40,8 @@ fn special_commands() {
 fn quoting() {
     let name = "my-app";
     let cmd = common::quoting_command(name);
-    common::assert_matches_path(
-        "tests/snapshots/quoting.bash",
+    common::assert_matches(
+        snapbox::file!["../snapshots/quoting.bash"],
         clap_complete::shells::Bash,
         cmd,
         name,
@@ -52,8 +52,8 @@ fn quoting() {
 fn aliases() {
     let name = "my-app";
     let cmd = common::aliases_command(name);
-    common::assert_matches_path(
-        "tests/snapshots/aliases.bash",
+    common::assert_matches(
+        snapbox::file!["../snapshots/aliases.bash"],
         clap_complete::shells::Bash,
         cmd,
         name,
@@ -64,8 +64,8 @@ fn aliases() {
 fn sub_subcommands() {
     let name = "my-app";
     let cmd = common::sub_subcommands_command(name);
-    common::assert_matches_path(
-        "tests/snapshots/sub_subcommands.bash",
+    common::assert_matches(
+        snapbox::file!["../snapshots/sub_subcommands.bash"],
         clap_complete::shells::Bash,
         cmd,
         name,
@@ -73,11 +73,24 @@ fn sub_subcommands() {
 }
 
 #[test]
+fn custom_bin_name() {
+    let name = "my-app";
+    let bin_name = "bin-name";
+    let cmd = common::basic_command(name);
+    common::assert_matches(
+        snapbox::file!["../snapshots/custom_bin_name.bash"],
+        clap_complete::shells::Bash,
+        cmd,
+        bin_name,
+    );
+}
+
+#[test]
 fn value_hint() {
     let name = "my-app";
     let cmd = common::value_hint_command(name);
-    common::assert_matches_path(
-        "tests/snapshots/value_hint.bash",
+    common::assert_matches(
+        snapbox::file!["../snapshots/value_hint.bash"],
         clap_complete::shells::Bash,
         cmd,
         name,
@@ -88,8 +101,8 @@ fn value_hint() {
 fn value_terminator() {
     let name = "my-app";
     let cmd = common::value_terminator_command(name);
-    common::assert_matches_path(
-        "tests/snapshots/value_terminator.bash",
+    common::assert_matches(
+        snapbox::file!["../snapshots/value_terminator.bash"],
         clap_complete::shells::Bash,
         cmd,
         name,
@@ -111,15 +124,15 @@ fn register_minimal() {
         .unwrap();
     snapbox::Assert::new()
         .action_env("SNAPSHOTS")
-        .matches_path("tests/snapshots/register_minimal.bash", buf);
+        .matches(snapbox::file!["../snapshots/register_minimal.bash"], buf);
 }
 
 #[test]
 fn two_multi_valued_arguments() {
     let name = "my-app";
     let cmd = common::two_multi_valued_arguments_command(name);
-    common::assert_matches_path(
-        "tests/snapshots/two_multi_valued_arguments.bash",
+    common::assert_matches(
+        snapbox::file!["../snapshots/two_multi_valued_arguments.bash"],
         clap_complete::shells::Bash,
         cmd,
         name,
@@ -130,8 +143,8 @@ fn two_multi_valued_arguments() {
 fn subcommand_last() {
     let name = "my-app";
     let cmd = common::subcommand_last(name);
-    common::assert_matches_path(
-        "tests/snapshots/subcommand_last.bash",
+    common::assert_matches(
+        snapbox::file!["../snapshots/subcommand_last.bash"],
         clap_complete::shells::Bash,
         cmd,
         name,
@@ -141,7 +154,7 @@ fn subcommand_last() {
 #[test]
 #[cfg(unix)]
 fn register_completion() {
-    common::register_example("static", "exhaustive", completest::Shell::Bash);
+    common::register_example::<completest_pty::BashRuntimeBuilder>("static", "exhaustive");
 }
 
 #[test]
@@ -152,12 +165,83 @@ fn complete() {
     }
 
     let term = completest::Term::new();
-    let mut runtime = common::load_runtime("static", "exhaustive", completest::Shell::Bash);
+    let mut runtime =
+        common::load_runtime::<completest_pty::BashRuntimeBuilder>("static", "exhaustive");
 
     let input = "exhaustive \t\t";
-    let expected = r#"%
--h          --global    --help      action      value       last        hint        help
--V          --generate  --version   quote       pacman      alias       complete"#;
+    let expected = r#"% 
+-h          --global    --help      action      value       last        hint        help        
+-V          --generate  --version   quote       pacman      alias       complete    "#;
+    let actual = runtime.complete(input, &term).unwrap();
+    snapbox::assert_eq(expected, actual);
+
+    // Issue 5239 (https://github.com/clap-rs/clap/issues/5239)
+    let input = "exhaustive hint --file test\t";
+    let expected = "exhaustive hint --file test     % exhaustive hint --file tests/";
+    let actual = runtime.complete(input, &term).unwrap();
+    snapbox::assert_eq(expected, actual);
+
+    {
+        use std::fs::File;
+        use std::path::Path;
+
+        let testdir = snapbox::path::PathFixture::mutable_temp().unwrap();
+        let testdir_path = testdir.path().unwrap();
+
+        File::create(Path::new(testdir_path).join("a_file")).unwrap();
+        File::create(Path::new(testdir_path).join("b_file")).unwrap();
+        std::fs::create_dir(Path::new(testdir_path).join("c_dir")).unwrap();
+        std::fs::create_dir(Path::new(testdir_path).join("d_dir")).unwrap();
+
+        let input = format!(
+            "exhaustive hint --file {}/\t\t",
+            testdir_path.to_string_lossy()
+        );
+        let actual = runtime.complete(input.as_str(), &term).unwrap();
+        assert!(
+            actual.contains("a_file")
+                && actual.contains("b_file")
+                && actual.contains("c_dir")
+                && actual.contains("d_dir"),
+            "Actual output:\n{}",
+            actual
+        );
+
+        let input = format!(
+            "exhaustive hint --dir {}/\t\t",
+            testdir_path.to_string_lossy()
+        );
+        let actual = runtime.complete(input.as_str(), &term).unwrap();
+        assert!(
+            !actual.contains("a_file")
+                && !actual.contains("b_file")
+                && actual.contains("c_dir")
+                && actual.contains("d_dir"),
+            "Actual output:\n{}",
+            actual
+        );
+    }
+
+    {
+        use std::fs::File;
+        use std::path::Path;
+
+        let testdir = snapbox::path::PathFixture::mutable_temp().unwrap();
+        let testdir_path = testdir.path().unwrap();
+
+        File::create(Path::new(testdir_path).join("foo bar.txt")).unwrap();
+        File::create(Path::new(testdir_path).join("baz\tqux.txt")).unwrap();
+
+        let input = format!(
+            "exhaustive hint --file {}/b\t",
+            testdir_path.to_string_lossy()
+        );
+        let actual = runtime.complete(input.as_str(), &term).unwrap();
+        assert!(!actual.contains("foo"), "Actual output:\n{actual}");
+    }
+
+    let input = "exhaustive hint --other \t";
+    let expected = snapbox::str!["exhaustive hint --other         % exhaustive hint --other "];
     let actual = runtime.complete(input, &term).unwrap();
     snapbox::assert_eq(expected, actual);
 }
@@ -165,5 +249,5 @@ fn complete() {
 #[test]
 #[cfg(unix)]
 fn register_dynamic_completion() {
-    common::register_example("dynamic", "exhaustive", completest::Shell::Bash);
+    common::register_example::<completest_pty::BashRuntimeBuilder>("dynamic", "exhaustive");
 }

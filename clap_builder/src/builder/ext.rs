@@ -53,6 +53,7 @@ pub(crate) trait Extension: std::fmt::Debug + Send + Sync + 'static {
     ///
     /// `Box<dyn Any>` can /// then be further `downcast` into
     /// `Box<ConcreteType>` where `ConcreteType` implements `Trait`.
+    #[allow(unused)]
     fn into_any(self: Box<Self>) -> Box<dyn std::any::Any>;
     /// Clone `&Box<dyn Trait>` (where `Trait: Extension`) to `Box<dyn Extension>`.
     ///
