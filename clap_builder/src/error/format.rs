@@ -36,7 +36,7 @@ impl ErrorFormatter for KindFormatter {
         let mut styled = StyledStr::new();
         start_error(&mut styled, styles);
         if let Some(msg) = error.kind().as_str() {
-            styled.push_str(&msg.to_string());
+            styled.push_str(msg);
         } else if let Some(source) = error.inner.source.as_ref() {
             let _ = write!(styled, "{source}");
         } else {
@@ -497,7 +497,7 @@ pub(crate) fn format_error_message(
 ) -> StyledStr {
     let mut styled = StyledStr::new();
     start_error(&mut styled, styles);
-    styled.push_str(&message.to_string());
+    styled.push_str(message);
     styled.push_str("\x1b[0m");
     if let Some(usage) = usage {
         put_usage(&mut styled, usage);
