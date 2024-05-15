@@ -28,6 +28,7 @@ pub struct Styles {
     placeholder: anstyle::Style,
     valid: anstyle::Style,
     invalid: anstyle::Style,
+    more_info: anstyle::Style,
 }
 
 impl Styles {
@@ -41,6 +42,7 @@ impl Styles {
             placeholder: anstyle::Style::new(),
             valid: anstyle::Style::new(),
             invalid: anstyle::Style::new(),
+            more_info: anstyle::Style::new(),
         }
     }
 
@@ -66,6 +68,8 @@ impl Styles {
                     .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Green))),
                 invalid: anstyle::Style::new()
                     .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Yellow))),
+                more_info: anstyle::Style::new()
+                    .fg_color(Some(anstyle::Color::Ansi(anstyle::AnsiColor::Blue)))
             }
         }
         #[cfg(not(feature = "color"))]
@@ -122,6 +126,13 @@ impl Styles {
         self.invalid = style;
         self
     }
+
+    /// a
+    #[inline]
+    pub const fn more_info(mut self, style: anstyle::Style) -> Self {
+        self.more_info = style;
+        self
+    }
 }
 
 /// Reflection
@@ -166,6 +177,12 @@ impl Styles {
     #[inline(always)]
     pub const fn get_invalid(&self) -> &anstyle::Style {
         &self.invalid
+    }
+
+    /// a
+    #[inline(always)]
+    pub const fn get_more_info(&self) -> &anstyle::Style {
+        &self.more_info
     }
 }
 

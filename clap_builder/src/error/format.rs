@@ -123,6 +123,7 @@ impl ErrorFormatter for RichFormatter {
         }
 
         try_help(&mut styled, styles, error.inner.help_flag);
+        let _ = write!(styled, "\n");
 
         styled
     }
@@ -247,13 +248,14 @@ fn write_dynamic_context(
                 } else {
                     let _ = write!(
                         styled,
-                        "invalid value '{}{invalid_value}{}{}' for '{}{invalid_arg}{}{}'",
+                        "invalid value '{}{invalid_value}{}{}' for '{}{invalid_arg}{}{}'{}",
                         invalid.render(),
                         invalid.render_reset(),
                         err.render(),
                         literal.render(),
                         literal.render_reset(),
                         err.render(),
+                        err.render_reset(),
                     );
                 }
 
@@ -270,10 +272,11 @@ fn write_dynamic_context(
             if let Some(ContextValue::String(invalid_sub)) = invalid_sub {
                 let _ = write!(
                     styled,
-                    "unrecognized subcommand '{}{invalid_sub}{}{}'",
+                    "unrecognized subcommand '{}{invalid_sub}{}{}'{}",
                     invalid.render(),
                     invalid.render_reset(),
                     err.render(),
+                    err.render_reset(),
                 );
                 true
             } else {
@@ -283,16 +286,23 @@ fn write_dynamic_context(
         ErrorKind::MissingRequiredArgument => {
             let invalid_arg = error.get(ContextKind::InvalidArg);
             if let Some(ContextValue::Strings(invalid_arg)) = invalid_arg {
-                styled.push_str("the following required arguments were not provided:");
+                let _ = write!(styled, "argument{} ", if invalid_arg.len() != 1 { "s" } else { "" });
+
                 for v in invalid_arg {
                     let _ = write!(
                         styled,
-                        "\n{TAB}{}{v}{}{}",
+                        "{}{v}{} ",
                         valid.render(),
                         valid.render_reset(),
-                        err.render(),
                     );
                 }
+
+                let _ = write!(
+                    styled,
+                    "{}were not provided which is required{}",
+                    err.render(),
+                    err.render_reset(),
+                );
                 true
             } else {
                 false
@@ -303,10 +313,11 @@ fn write_dynamic_context(
             if let Some(ContextValue::String(invalid_sub)) = invalid_sub {
                 let _ = write!(
                     styled,
-                    "'{}{invalid_sub}{}{}' requires a subcommand but one was not provided",
+                    "'{}{invalid_sub}{}{}' requires a subcommand but one was not provided{}",
                     invalid.render(),
                     invalid.render_reset(),
                     err.render(),
+                    err.render_reset(),
                 );
                 let values = error.get(ContextKind::ValidSubcommand);
                 write_values_list("subcommands", styled, valid, values);
@@ -327,13 +338,14 @@ fn write_dynamic_context(
             {
                 let _ = write!(
                     styled,
-                    "unexpected value '{}{invalid_value}{}{}' for '{}{invalid_arg}{}{}' found; no more were expected",
+                    "unexpected value '{}{invalid_value}{}{}' for '{}{invalid_arg}{}{}' found; no more were expected{}",
                     invalid.render(),
                     invalid.render_reset(),
                     err.render(),
                     literal.render(),
                     literal.render_reset(),
                     err.render(),
+                    err.render_reset(),
                 );
                 true
             } else {
@@ -353,7 +365,7 @@ fn write_dynamic_context(
                 let were_provided = singular_or_plural(*actual_num_values as usize);
                 let _ = write!(
                     styled,
-                    "{}{min_values}{}{} more values required by '{}{invalid_arg}{}{}'; only {}{actual_num_values}{}{}{were_provided}",
+                    "{}{min_values}{}{} more values required by '{}{invalid_arg}{}{}'; only {}{actual_num_values}{}{}{were_provided}{}",
                     valid.render(),
                     valid.render_reset(),
                     err.render(),
@@ -363,6 +375,7 @@ fn write_dynamic_context(
                     invalid.render(),
                     invalid.render_reset(),
                     err.render(),
+                    err.render_reset(),
                 );
                 true
             } else {
@@ -390,6 +403,7 @@ fn write_dynamic_context(
                 if let Some(source) = error.inner.source.as_deref() {
                     let _ = write!(styled, ": {source}");
                 }
+                let _ = write!(styled, "{}", err.render_reset());
                 true
             } else {
                 false
@@ -408,7 +422,7 @@ fn write_dynamic_context(
                 let were_provided = singular_or_plural(*actual_num_values as usize);
                 let _ = write!(
                     styled,
-                    "{}{num_values}{}{} values required for '{}{invalid_arg}{}{}' but {}{actual_num_values}{}{}{were_provided}",
+                    "{}{num_values}{}{} values required for '{}{invalid_arg}{}{}' but {}{actual_num_values}{}{}{were_provided}{}",
                     valid.render(),
                     valid.render_reset(),
                     err.render(),
@@ -418,6 +432,7 @@ fn write_dynamic_context(
                     invalid.render(),
                     invalid.render_reset(),
                     err.render(),
+                    err.render_reset(),
                 );
                 true
             } else {
@@ -429,10 +444,11 @@ fn write_dynamic_context(
             if let Some(ContextValue::String(invalid_arg)) = invalid_arg {
                 let _ = write!(
                     styled,
-                    "unexpected argument '{}{invalid_arg}{}{}' found",
+                    "unexpected argument '{}{invalid_arg}{}{}' found{}",
                     invalid.render(),
                     invalid.render_reset(),
                     err.render(),
+                    err.render_reset(),
                 );
                 true
             } else {
@@ -489,6 +505,7 @@ pub(crate) fn format_error_message(
     if let Some(cmd) = cmd {
         try_help(&mut styled, styles, get_help_flag(cmd));
     }
+    styled.push_str("\n");
     styled
 }
 
@@ -520,11 +537,16 @@ fn try_help(styled: &mut StyledStr, styles: &Styles, help: Option<&str>) {
     if let Some(help) = help {
         use std::fmt::Write as _;
         let literal = &styles.get_literal();
+        let info = &styles.get_more_info();
         let _ = write!(
             styled,
-            "\n\nFor more information, try '{}{help}{}'.\n",
+            "\n{}  ─ {}{}Consider:{} use '{}{help}{}' for more information\n",
+            info.render(),
+            info.render_reset(),
             literal.render(),
-            literal.render_reset()
+            literal.render_reset(),
+            literal.render(),
+            literal.render_reset(),
         );
     } else {
         styled.push_str("\n");

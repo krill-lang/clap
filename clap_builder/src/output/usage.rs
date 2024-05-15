@@ -44,7 +44,7 @@ impl<'cmd> Usage<'cmd> {
         let mut styled = StyledStr::new();
         let _ = write!(
             styled,
-            "{}Usage:{} ",
+            "{}Info: the correct way to use this tool is: {}",
             self.styles.get_usage().render(),
             self.styles.get_usage().render_reset()
         );
